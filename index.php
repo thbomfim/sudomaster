@@ -10,12 +10,20 @@
 </head>
 
 <body>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-sm-8">col-sm-8</div>
-            <div class="col-sm-4">col-sm-4</div>
+    <h1>Login</h1>
+    <form action="login.php" method="post">
+        <div class="mb-3">
+            <label for="usuario">Nome de usuario</label>
+            <input type="text" name="user">
         </div>
-    </div>
+        <div class="mb-3">
+            <label for="password">senha</label>
+            <input type="password" name="password" id=""><br>
+            <button type="submit" class="btn btn-outline-success">Fazer login</button>
+        </div>
+    </form>
+    <br>
+    <a href="register.php">Faça o seu cadatro</a>
 
     <script src="bootstrap/@popperjs/core/dist/umd/popper.js"></script>
     <script src="bootstrap/dist/js/bootstrap.js"></script>
