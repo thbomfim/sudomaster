@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Passion+One:wght@400;900&family=Sofia+Sans+Condensed&display=swap');
+body {
+    background-color: #363636 !important;
+    color: #fff !important;
+}
+@font-face {
+    font-family: Passion;
+    src: url(PassionOne-Regular.ttf);
+ }
+.logo {
+    font-family: Passion;
+   /* color: rgb(1, 205, 241);*/
+    font-size: 180%;
+}
+.center {
+    align-content: center;
+}
+

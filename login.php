@@ -32,6 +32,5 @@ session_start();
 $_SESSION["id"] = $row["id"];
 $_SESSION["user"] = $row["user"];
 
-
-echo "<a href=\"page.php?page=main\">Bem vindo</a>";
+header("Location: page.php?page=main");
 ?>
