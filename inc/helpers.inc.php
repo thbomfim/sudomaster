@@ -1,5 +1,5 @@
 <?php 
-session_start();
+//session_start();
 include ("config.inc.php");
 
 function getIdUser() 
@@ -41,8 +41,29 @@ function isAdmin()
     $stmt->execute();
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($admin["perm"] == '1' OR $admin["perm"] == '2') 
+    if ($admin["perm"] == '1') 
     {
+    
+        return true;
+    }else 
+    {
+        return false;
+    }
+
+
+}
+
+function isMod() 
+{
+    global $pdo;
+    
+    $sql = "SELECT perm FROM sudo_users WHERE id = :iduser";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":iduser", getIdUser());
+    $stmt->execute();
+    $mod = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($mod["perm"] == '1' OR $mod["perm"] =='2') {
         
         return true;
     }else 

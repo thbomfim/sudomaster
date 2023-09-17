@@ -27,10 +27,8 @@ date_default_timezone_set("Brazil/East");
 ##Caso a conexao seja reprovada, exibe na tela uma mensagem de erro
 if(!$conectando) die ("
 <p align='center'>
-<img src='' alt='*'/>
 <br/>
 <b>Banco de dados desconectado!</b>
-<br/>
 <br/>
 Tente acessar o site dentro de alguns instantes, ou entre em contato!</p>
 <br/>

@@ -10,6 +10,15 @@
 </head>
 
 <body>
+  <?php
+  session_start();
+//verifica se o usuario estar logado
+if (isset($_SESSION['id'])) {
+    // O usuário não está logado, redirecione para a página de login
+    header("Location: page.php?page=main");
+    exit;
+  }else{
+  ?>
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -57,6 +66,9 @@
 
     <script src="bootstrap/@popperjs/core/dist/umd/popper.js"></script>
     <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <?php 
+  }
+  ?>
 </body>
 
 </html>

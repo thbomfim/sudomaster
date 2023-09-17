@@ -2,49 +2,24 @@
 session_start();
 include("inc/config.inc.php");
 
-function buscarId() {
-    global $pdo;
-    $sql = $pdo->query("SELECT id FROM sudo_users WHERE id='".$_SESSION['id']."'")->fetch();
+$pdoo = new PDO("mysql:host=localhost;dbname=submaster", "root", "thbomfim");
 
-    return $sql[0];
-}
-echo buscarId();
-echo "<br>";
-$sql = $pdo->query("SELECT id FROM sudo_users WHERE id='".$_SESSION['id']."'")->fetch();
 
-print_r($sql[0]);
+$tinfo = $pdoo->query("SELECT name, text, authorid, crdate, views, fid, pollid from fun_topics WHERE id='1'")->fetch();   
 
-//echo "$sql";
-echo "<br>";
-function get_user_id() {
-    global $pdo;
-    // Verifique se o usuário está logado
-    if (!isset($_SESSION['id'])) {
-      // O usuário não está logado, redirecione para a página de login
-      header("Location: login.php");
-      exit;
-    }
-  
-    
-    // Selecione o usuário do banco de dados
-    $sql = "SELECT id FROM sudo_users WHERE id = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(":id", $_SESSION['id']);
-    $stmt->execute();
-  
-    // Obtenha o ID do usuário
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-  
-    // Retorne o ID do usuário
-    return $row['id'];
-  }
+echo "<pre>nome: $tinfo[0]<br>
+      texto: $tinfo[1]<br>
+      views: $tinfo[2]<br></pre>";
+echo "$tnm";
 
-  echo get_user_id();
+$fcats = $pdo->query("SELECT id, name FROM sudo_fcat ORDER BY position, id")->fetchAll();
 
+//$fcats = $pdo->query("SELECT id FROM sudo_subcat WHERE catid ='2'")->fetch();
+
+var_dump($fcats);
 
 echo "<br>";
-echo "<pre>";
-var_dump($_SESSION["user"]);
-echo "</pre>";
+$forums = $pdoo->query("SELECT id, name FROM fun_forums WHERE cid='1' AND clubid='0' ORDER BY position, id, name")->fetch();
+var_dump($forums);
 
 ?>
