@@ -1,3 +1,6 @@
+<?php 
+include_once("inc/helpers.inc.php");
+?>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand logo text-primary" href="page.php?page=main  ">SudoMaster</a>
@@ -28,9 +31,14 @@
                             <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
+                    <?php 
+                    if (isAdmin(ID_USER)) {
+                        
+                       echo' <li class="nav-item">
+                            <a class="nav-link active" href="admincp.php?page=cpanel">Painel admin</a>
+                        </li>';
+                    }
+                    ?>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
