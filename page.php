@@ -12,7 +12,7 @@
 <body>
 
     <?php 
-include("inc/config.inc.php");
+include_once("inc/config.inc.php");
 
 //session_start();
 $page = $_GET["page"] ?? '';
@@ -30,11 +30,9 @@ if (!isset($_SESSION['id'])) {
     $fcat = $_GET["fcat"] ?? '';
     ?>
     <div class="container">
-        <div class="comtainer-fluid p-2 mb-2 bg-primary rounded">
-            Forum
-        </div>
+        <div class="comtainer-fluid p-2 mb-2 bg-primary rounded">Forum</div>
         <?php
-    echo "ola <strong> " .NAME_USER."</strong><br>";
+    echo "ola <strong> ".NAME_USER." </strong><br>";
     $fcats = $pdo->query("SELECT id, name FROM sudo_fcat ORDER BY position, id");
     while ($fcat = $fcats->fetch()) {
         $fcatlink = "<a href=\"page.php?page=viewsubcat&fcat=$fcat[0]\">$fcat[1]</a><br>";
@@ -43,6 +41,7 @@ if (!isset($_SESSION['id'])) {
     ////Pagina do forum 
   }elseif ($page == "viewsubcat") 
   {
+    echo "<div class=\"container\">";
     $fcat = $_GET["fcat"];
     $idTopic = $_GET["idTopic"] ?? '';
 
@@ -54,10 +53,12 @@ if (!isset($_SESSION['id'])) {
     while ($fsubcat = $stmt->fetch()) {
       $fsubcatlink = "<a href=\"page.php?page=viewtopics&idTopic=$fsubcat[0]\">$fsubcat[1]</a><br>";
       echo "$fsubcatlink";
+      echo "</div>";
     }
     ////Pagina de subcategorias do forum
   }elseif ($page == "viewtopics") 
   {
+    echo "<div class=\"container\">";
     $idTopic = $_GET["idTopic"] ?? '';
 
     $sql = "SELECT id, author, title FROM sudo_topic WHERE tid = :tid ORDER BY id, title";
@@ -71,10 +72,12 @@ if (!isset($_SESSION['id'])) {
       }else{
         echo "<a href=\"page.php?page=viewtopic&idTopic=$tid[0]\">$tid[2]<a/><br>";
     }
+    echo "</div>";
   }
   ////Pagina dos topicos
   }elseif ($page == "viewtopic") 
   {
+    echo "<div class=\"container\">";
     $idTopic = $_GET["idTopic"] ?? '';
 
     $ftopics = $pdo->prepare("SELECT title, content, author, datecreate FROM sudo_topic WHERE id= :idTopic");
@@ -85,7 +88,7 @@ if (!isset($_SESSION['id'])) {
     echo "Titulo: $ftopic[0]<br>";
     echo "Texto: $ftopic[1]";
     //echo "Titulo: $ftopics[0]";
-    
+    echo "</div>";
   }
   
   ?>

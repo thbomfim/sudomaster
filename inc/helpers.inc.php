@@ -1,6 +1,6 @@
 <?php 
 //session_start();
-include ("config.inc.php");
+include_once ("config.inc.php");
 
 function getIdUser() 
 {
@@ -22,7 +22,7 @@ function getNameUser()
 
     $sql = "SELECT user FROM sudo_users WHERE id = :iduser";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(":iduser", getIdUser());
+    $stmt->bindValue(":iduser", ID_USER);
     $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@ function isAdmin()
 
     $sql = "SELECT perm FROM sudo_users WHERE id = :iduser";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(":iduser", getIdUser());
+    $stmt->bindValue(":iduser", ID_USER);
     $stmt->execute();
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -59,7 +59,7 @@ function isMod()
     
     $sql = "SELECT perm FROM sudo_users WHERE id = :iduser";
     $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(":iduser", getIdUser());
+    $stmt->bindValue(":iduser", ID_USER);
     $stmt->execute();
     $mod = $stmt->fetch(PDO::FETCH_ASSOC);
 
