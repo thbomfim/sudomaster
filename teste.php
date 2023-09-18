@@ -1,3 +1,8 @@
+/**
+*
+*este arquivo e somente para teste de querys 
+*
+*/
 <?php 
 session_start();
 include("inc/config.inc.php");
