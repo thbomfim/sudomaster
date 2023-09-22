@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 ini_set("memory_limit", "256M");
 define("ID_USER", "$_SESSION[id]");
 define("NAME_USER", "$_SESSION[user]");
+$title = "SudoMaster";
 ##Hora local 
 date_default_timezone_set("Brazil/East");
 
