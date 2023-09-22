@@ -16,3 +16,16 @@ body {
     align-content: center;
 }
 
+.linha1{
+    padding: 8px;
+    border: 1px solid white;
+    align-content: center;
+    text-align: center;
+    color: rgb(2, 100, 212);
+    
+}
+
+.divClear {
+    color: #fff;
+}
+
