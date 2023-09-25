@@ -41,16 +41,16 @@ if (!isset($_SESSION['id'])) {
     ////Pagina do forum 
   }elseif ($page == "viewsubcat") 
   {
-    echo "<div class=\"container\">";
     $fcat = $_GET["fcat"];
     $idTopic = $_GET["idTopic"] ?? '';
-
+    
     $sql = "SELECT id, name FROM sudo_subcat WHERE catid = :fcat ORDER BY position, id, name";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(":fcat","$fcat");
     $stmt->execute(); 
-
+    
     while ($fsubcat = $stmt->fetch()) {
+      echo "<div class=\"container\">";
       $fsubcatlink = "<a href=\"page.php?page=viewtopics&idTopic=$fsubcat[0]\">$fsubcat[1]</a><br>";
       echo "$fsubcatlink";
       echo "</div>";
@@ -58,16 +58,21 @@ if (!isset($_SESSION['id'])) {
     ////Pagina de subcategorias do forum
   }elseif ($page == "viewtopics") 
   {
-    echo "<div class=\"container\">";
     $idTopic = $_GET["idTopic"] ?? '';
-
+    
     $sql = "SELECT id, author, title FROM sudo_topic WHERE tid = :tid ORDER BY id, title";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(":tid","$idTopic");
     $stmt->execute();
+    
+    $sql2 = "SELECT * FROM sudo_topic WHERE tid = :tid";
+    $stmt2 = $pdo->prepare($sql2);
+    $stmt2->bindParam(":tid",$idTopic);
+    $stmt2->execute();
 
     while ($tid = $stmt->fetch()) {
-      if ($tid == 0) {
+      echo "<div class=\"container\">";
+      if ($stmt2->fetchColumn() == 0) {
         echo "Nada por aqui";
       }else{
         echo "<a href=\"page.php?page=viewtopic&idTopic=$tid[0]\">$tid[2]<a/><br>";

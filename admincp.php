@@ -118,7 +118,7 @@ if (isAdmin() == false)
     {
         $idCat = $_POST["idCat"];
 
-        $sql = "DELETE FROM sudo_cat WHERE id = :id";
+        $sql = "DELETE FROM sudo_fcat WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(":id","$idCat");
         $stmt->execute();
