@@ -12,7 +12,7 @@ if (empty($user) || empty($password)) {
     exit;
 }
 
-$sql = "SELECT * FROM sudo_users WHERE user = :user AND password = :pass";
+$sql = "SELECT * FROM sudo_users WHERE user = :user AND pass = :pass";
 $stmt = $pdo->prepare($sql);
 $stmt->bindParam(":user", $user);
 $stmt->bindParam(":pass", $password);

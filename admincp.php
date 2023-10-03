@@ -18,9 +18,10 @@ include_once("inc/navbar.inc.php");
 <body>
     <?php 
 //verifica se o usuario estar logado
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['id'])) 
+{
     // O usuário não está logado, redirecione para a página de login
-    echo "Voce nao esta logado <a href=\"index.php\">Fazer login</a>";
+    header("Location: index.php");
     exit;
   }
 
@@ -41,6 +42,9 @@ if (isAdmin() == false)
        echo "<a href=\"admincp.php?page=delSubCats\">Deletar Subcategoria</a><br>";
        echo "<a href=\"admincp.php?page=delCats\">Deletar Categoria</a><br>"; 
        echo "<hr>";
+       echo "<a href=\"admincp.php?page=addcats\">Adicionar categorias</a><br>";
+       echo "<a href=\"admincp.php?page=addsubcats\">Adicionar Subcategorias</a><br>";
+       //echo "<a href=\"admin.php?page=addcat\">Adicionar categorias</a><br>";
        echo "</div>";    
     
     }elseif ($page == "delTopics") 
@@ -67,9 +71,11 @@ if (isAdmin() == false)
         $stmt->bindValue(":id","$idTopic");
         $stmt->execute();
 
-        if ($stmt->rowCount() >= 1) {
+        if ($stmt->rowCount() >= 1) 
+        {
             echo "Topico deletado com sucesso!";
-        }else {
+        }else 
+        {
             echo "Ocoreu um erro";
         }
         
@@ -87,7 +93,8 @@ if (isAdmin() == false)
         echo "<button type=\"submit\" class=\"btn btn-outline-success\">Deletar</button>";
         
         echo "</form>";
-    }elseif ($page == "delSubCat") {
+    }elseif ($page == "delSubCat") 
+    {
         $idSubCat = $_POST["idSubCat"];
 
         $sql = "DELETE FROM sudo_subcat WHERE id = :id";
@@ -95,9 +102,11 @@ if (isAdmin() == false)
         $stmt->bindValue(":id","$idSubCat");
         $stmt->execute();
 
-        if ($stmt->rowCount() >= 1) {
+        if ($stmt->rowCount() >= 1) 
+        {
             echo "Topico deletado com sucesso!";
-        }else {
+        }else 
+        {
             echo "Ocoreu um erro";
         }
     }elseif ($page == "delCats") 
@@ -123,10 +132,95 @@ if (isAdmin() == false)
         $stmt->bindValue(":id","$idCat");
         $stmt->execute();
 
-        if ($stmt->rowCount() >= 1) {
+        if ($stmt->rowCount() >= 1) 
+        {
             echo "Topico deletado com sucesso!";
-        }else {
+        }else 
+        {
             echo "Ocoreu um erro";
+        }
+    }
+    elseif ($page == "addcats") 
+    {
+        echo "<div class=\"container\"><br>";
+        echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"admincp.php?page=addcat\" method=\"POST\">";
+        echo "<div class=\"mb-3\">";
+        echo "<label for=\"nameCat\" class=\"col-sm-2 col-form-label\">Nome da categoria:</label>";
+        echo "<input type=\"text\" name=\"nameCat\" id=\"nameCat\"><br>";
+        echo "</div>";
+        echo "<div class=\"mb-3\">";
+        echo "<label for=\"position\">posição da categoria:</label>";
+        echo "<input type=\"number\" name=\"position\" id=\"position\"><br>";
+        echo "</div>";
+        echo "<button type=\"submit\" class=\"btn btn-outline-primary\">Adicionar categoria</button>";
+        echo "</div>";
+    }
+    elseif ($page == "addcat") 
+    {
+        $nameCat = $_POST["nameCat"];
+        $position = $_POST["position"];
+
+        if (empty($nameCat)) 
+        {
+            echo "Digite o nome da categoria";
+        }elseif (empty($position)) 
+        {
+            echo "Digite a posição da categoria";
+        }else 
+        {
+            $sql = "INSERT INTO sudo_fcat (name, position) VALUES(:name, :position)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(":name", $nameCat);
+            $stmt->bindValue(":position", $position);
+            $stmt->execute();
+
+            echo "Categoria adicionada!";
+        }
+    }elseif ($page == "addsubcats") 
+    {
+        
+        echo "<div class=\"container\"><br>";
+        echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"admincp.php?page=addsub1cat\" method=\"POST\">";
+        echo "<div class=\"mb-3\">";
+        echo "<label for=\"nameCat\" class=\"col-sm-2 col-form-label\">Nome da categoria:</label>";
+        echo "<input type=\"text\" name=\"nameSubCat\" id=\"nameSubCat\"><br>";
+        echo "</div>";
+        echo "<div class=\"mb-3\">";
+        $option = $pdo->query("SELECT id,name FROM sudo_fcat");
+        while ($options = $option->fetch()) {
+        echo "<select class=\"form-select form-select-lg mb-3\" aria-label=\"Large select example\">";
+        echo "<option selected>selecione</option>";
+            echo "<option value=\"\" name=\"catid\">$options[1]</option>";
+            echo "</select>";
+
+        }
+        echo "<div class=\"mb-3\">";
+        echo "<label for=\"position\">posição da categoria:</label>";
+        echo "<input type=\"number\" name=\"position\" id=\"position\"><br>";
+        echo "</div>";
+        echo "<button type=\"submit\" class=\"btn btn-outline-primary\">Adicionar categoria</button>";
+        echo "</div>";
+    }elseif ($page == "addsubcat") 
+    {
+        $nameSubCat = $_POST["nameSubCat"];
+        $catid = $_POST["catid"];
+        $position = $_POST["position"];
+
+        if (empty($nameSubCat)) 
+        {
+            echo "Digite o nome da categoria";
+        }elseif (empty($position)) 
+        {
+            echo "Digite a posição da categoria";
+        }else 
+        {
+            $sql = "INSERT INTO sudo_subcat (name, position) VALUES(:name, :position)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(":name", $nameSubCat);
+            $stmt->bindValue(":position", $position);
+            $stmt->execute();
+
+            echo "Categoria adicionada!";
         }
     }
     

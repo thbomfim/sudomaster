@@ -23,7 +23,7 @@ elseif (empty($email)) {
     echo'Digite um email';
 }
 else{
-    $sql = " INSERT INTO sudo_users (user, password, email) VALUES (:user, :pass, :email)";
+    $sql = " INSERT INTO sudo_users (user, pass, email) VALUES (:user, :pass, :email)";
 
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':user', $user);
