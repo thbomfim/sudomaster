@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200/">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="style.css">
     <title>SudoMaster</title>
@@ -29,7 +33,7 @@ if (!isset($_SESSION['id'])) {
   {
     $fcat = $_GET["fcat"] ?? '';
     ?>
-    <div class="container">
+    < class="container">
         <div class="comtainer-fluid p-2 mb-2 bg-primary rounded">Forum</div>
         <?php
     echo "ola <strong> ".NAME_USER." </strong><br>";
@@ -70,15 +74,36 @@ if (!isset($_SESSION['id'])) {
     $stmt2->bindParam(":tid",$idTopic);
     $stmt2->execute();
 
+    echo "<div class=\"container\">";
+    ?>
+        <div class="container text-center">
+            <div class="col align-self-end">
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"><span
+                        class="material-symbols-rounded">note_add</span></button>
+
+                <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom"
+                    aria-labelledby="offcanvasBottomLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasBottomLabel">Crie seu novo topico</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body small">
+                        ...
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
     while ($tid = $stmt->fetch()) {
-      echo "<div class=\"container\">";
-      if ($stmt2->fetchColumn() == 0) {
+      if ($stmt2->columnCount() == 0) {
         echo "Nada por aqui";
       }else{
         echo "<a href=\"page.php?page=viewtopic&idTopic=$tid[0]\">$tid[2]<a/><br>";
     }
-    echo "</div>";
   }
+  echo "</div>";
+    echo "</div>";
   ////Pagina dos topicos
   }elseif ($page == "viewtopic") 
   {
@@ -94,6 +119,9 @@ if (!isset($_SESSION['id'])) {
     echo "Texto: $ftopic[1]";
     //echo "Titulo: $ftopics[0]";
     echo "</div>";
+  }elseif ($page == "createtopic") 
+  {
+    # code...
   }
   
   ?>

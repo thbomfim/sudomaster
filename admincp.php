@@ -5,7 +5,7 @@ include_once("inc/helpers.inc.php");
 include_once("inc/navbar.inc.php");
 ?>
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -180,20 +180,19 @@ if (isAdmin() == false)
     {
         
         echo "<div class=\"container\"><br>";
-        echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"admincp.php?page=addsub1cat\" method=\"POST\">";
+        echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"admincp.php?page=addsubcat\" method=\"POST\">";
         echo "<div class=\"mb-3\">";
         echo "<label for=\"nameCat\" class=\"col-sm-2 col-form-label\">Nome da categoria:</label>";
         echo "<input type=\"text\" name=\"nameSubCat\" id=\"nameSubCat\"><br>";
         echo "</div>";
         echo "<div class=\"mb-3\">";
         $option = $pdo->query("SELECT id,name FROM sudo_fcat");
-        while ($options = $option->fetch()) {
-        echo "<select class=\"form-select form-select-lg mb-3\" aria-label=\"Large select example\">";
+        echo "<select class=\"form-select form-select-lg mb-3\" aria-label=\"Large select example\" name=\"catid\">";
         echo "<option selected>selecione</option>";
-            echo "<option value=\"\" name=\"catid\">$options[1]</option>";
-            echo "</select>";
-
+        while ($options = $option->fetch()) {
+            echo "<option value=\"$options[0]\">$options[1]</option>";
         }
+        echo "</select>";
         echo "<div class=\"mb-3\">";
         echo "<label for=\"position\">posição da categoria:</label>";
         echo "<input type=\"number\" name=\"position\" id=\"position\"><br>";
@@ -214,9 +213,10 @@ if (isAdmin() == false)
             echo "Digite a posição da categoria";
         }else 
         {
-            $sql = "INSERT INTO sudo_subcat (name, position) VALUES(:name, :position)";
+            $sql = "INSERT INTO sudo_subcat (name, position, catid) VALUES(:name, :position, :catid)";
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(":name", $nameSubCat);
+            $stmt->bindValue(":catid", $catid); 
             $stmt->bindValue(":position", $position);
             $stmt->execute();
 
