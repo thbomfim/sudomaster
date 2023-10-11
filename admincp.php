@@ -145,7 +145,7 @@ if (isAdmin() == false)
         echo "<div class=\"container\"><br>";
         echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"admincp.php?page=addcat\" method=\"POST\">";
         echo "<div class=\"mb-3\">";
-        echo "<label for=\"nameCat\" class=\"col-sm-2 col-form-label\">Nome da categoria:</label>";
+        echo "<label for=\"nameCat\">Nome da categoria: </label>";
         echo "<input type=\"text\" name=\"nameCat\" id=\"nameCat\"><br>";
         echo "</div>";
         echo "<div class=\"mb-3\">";

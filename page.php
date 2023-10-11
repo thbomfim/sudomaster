@@ -33,7 +33,7 @@ if (!isset($_SESSION['id'])) {
   {
     $fcat = $_GET["fcat"] ?? '';
     ?>
-    < class="container">
+    <div class="container">
         <div class="comtainer-fluid p-2 mb-2 bg-primary rounded">Forum</div>
         <?php
     echo "ola <strong> ".NAME_USER." </strong><br>";
@@ -42,6 +42,7 @@ if (!isset($_SESSION['id'])) {
         $fcatlink = "<a href=\"page.php?page=viewsubcat&fcat=$fcat[0]\">$fcat[1]</a><br>";
         echo "$fcatlink";
     }
+    echo "</div>";
     ////Pagina do forum 
   }elseif ($page == "viewsubcat") 
   {
@@ -75,26 +76,7 @@ if (!isset($_SESSION['id'])) {
     $stmt2->execute();
 
     echo "<div class=\"container\">";
-    ?>
-        <div class="container text-center">
-            <div class="col align-self-end">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                    data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom"><span
-                        class="material-symbols-rounded">note_add</span></button>
-
-                <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom"
-                    aria-labelledby="offcanvasBottomLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasBottomLabel">Crie seu novo topico</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body small">
-                        ...
-                    </div>
-                </div>
-            </div>
-        </div>
-        <?php
+    echo "<a href=\"?page=createtopics\">Criar novo topico</a>";
     while ($tid = $stmt->fetch()) {
       if ($stmt2->columnCount() == 0) {
         echo "Nada por aqui";
@@ -119,9 +101,43 @@ if (!isset($_SESSION['id'])) {
     echo "Texto: $ftopic[1]";
     //echo "Titulo: $ftopics[0]";
     echo "</div>";
-  }elseif ($page == "createtopic") 
+  }elseif ($page == "createtopics") 
   {
-    # code...
+    echo "<div class=\"container\">";
+      
+    echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"?page=createtopic\" method=\"POST\">";
+    echo "<div class=\"mb-3\">";
+        echo "<label for=\"titleTopic\">Titulo do topico: </label>";
+        echo "<input type=\"text\" name=\"titleTopic\" id=\"titleTopic\"><br>";
+        echo "</div>";
+
+        echo "<div class=\"mb-3\">";
+        echo "<label for=\"content\">Conteudo do topico: </label>";
+        echo "<input type=\"text\" name=\"cantent\" id=\"content\"><br>";
+        echo "</div>";
+
+        echo "<button type=\"submit\" class=\"btn btn-outline-primary\">Adicionar categoria</button>";
+        echo "</div>";
+
+    echo "</div>";
+  }elseif ($page == "createtopic") {
+
+    $title = $_POST["title"];
+    $content = $_POST["content"];
+
+    $sql = "INSERT INTO sudo_topic (author, title, content, tid) VALUES(:author, :title, :content, :tid)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":author", ".NAMER_USER.");
+    $stmt->bindValue(":tilte", $titleTopic);
+    $stmt->bindValue(":content", $content);
+    $stmt->bindValue(":tid", $tid);
+    $stmt->execute();
+
+    if ($stmt == "true") {
+      echo "topico adicionado";
+    }else {
+      echo "ocoreu algum erro";
+    }
   }
   
   ?>
