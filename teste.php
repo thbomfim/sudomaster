@@ -4,17 +4,38 @@
 *
 */
 <?php 
-session_start();
-include("inc/config.inc.php");
+
+try
+  { 
+    $pdo = new PDO("mysql:host=localhost;dbname=sudomaster", "root", "123");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    $conectando = True;
+  }
+  catch(PDOException $e)
+  {
+    $conectando = False;
+  }
+  
+##Caso a conexao seja reprovada, exibe na tela uma mensagem de erro
+if(!$conectando) die ("
+<p align='center'>
+<br/>
+<b>Banco de dados desconectado!</b>
+<br/>
+Tente acessar o site dentro de alguns instantes, ou entre em contato!</p>
+<br/>
+");
 
 //$pdoo = new PDO("mysql:host=localhost;dbname=submaster", "root", "thbomfim");
+echo "<br>";
 
+$sql = "SELECT user_id FROM sudo_votes WHERE idtopic = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":id", "1");
+    $stmt->execute();
 
-        $sql = $pdo->query("SELECT id, name FROM sudo_subcat");
+    $res = $stmt->fetch();
 
-        while ($sqls = $sql->fetch()) {
-            echo "$sqls[0]";
-            echo "$sqls[1]";
-        }
-
+    var_dump($res["user_id"] == 1);
 ?>

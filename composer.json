@@ -1,0 +1,13 @@
+{
+    "name": "thbomfim/sudomaster",
+    "autoload": {
+        "psr-4": {
+            "app\\": "app"
+        }
+    },
+    "authors": [
+        {
+            "name": "thiago bomfim"
+        }
+    ]
+}
