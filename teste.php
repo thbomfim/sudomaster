@@ -30,12 +30,13 @@ Tente acessar o site dentro de alguns instantes, ou entre em contato!</p>
 //$pdoo = new PDO("mysql:host=localhost;dbname=submaster", "root", "thbomfim");
 echo "<br>";
 
-$sql = "SELECT user_id FROM sudo_votes WHERE idtopic = :id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(":id", "1");
-    $stmt->execute();
+$sql = "SELECT comment FROM sudo_topic WHERE id = :idTopic";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(":idTopic", 1);
+      $stmt->execute();
+      $res = $stmt->fetch();
 
-    $res = $stmt->fetch();
+      
 
-    var_dump($res["user_id"] == 1);
+    var_dump($novovalor + $res["comment"] + 1;);
 ?>
