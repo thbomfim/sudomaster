@@ -9,6 +9,10 @@
   'opsz' 24
 }
 
+a:link,:hover {
+    text-decoration: none;
+}
+
 body {
     
 }
@@ -32,8 +36,9 @@ body {
     margin-bottom: -18px;
     background-color: #4F4F4F;
     color: #fff;
-    border-radius: 8px;
-    border-left: solid #00BFFF 3px;
+    border-radius: 5px;
+    border-left: solid #00BFFF 2px;
+    border-right: solid #00BFFF 2px;
 }
 
 .divClear {
