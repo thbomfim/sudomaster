@@ -23,7 +23,8 @@ $page = $_GET["page"] ?? '';
 include_once "../config/navbar.inc.php";
 
 //verifica se o usuario estar logado
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['id'])) 
+{
     // O usuário não está logado, redirecione para a página de login
     echo "Voce nao esta logado <a href=\"index.php\">Fazer login</a>";
     exit;
@@ -59,7 +60,7 @@ if (!isset($_SESSION['id'])) {
     echo "<div class=\"container\">";
     while ($tid = $stmt->fetch()) {
 
-        echo "<a href=\"?page=viewtopic&idTopic=$tid[0]\">$tid[2]<a/><br>";
+        echo "<a href=\"?page=viewtopic&idTopic=$tid[0]\"><div class=\"linha1\">$tid[2]</div><a/><br>";
   }
   echo "</div>";
     echo "</div>";
@@ -73,7 +74,18 @@ if (!isset($_SESSION['id'])) {
     $ftopics->bindValue(":idTopic", "$idTopic");
     $ftopics->execute();
     $ftopic = $ftopics->fetch();
+
+    $sql = "SELECT user_id FROM sudo_votes WHERE idtopic = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":id", "$idTopic");
+    $stmt->execute();
+    $res = $stmt->fetch();
+
+    if ($res["user_id"] ?? '' == getIdUser()) {
+      echo "Desvotar";
+    } else{
     echo "<a href=\"?page=voting&idTopic=$idTopic\">votar</a>";
+    }
     echo "Titulo: $ftopic[0]<br>";
     echo "Texto: $ftopic[1]";
 
@@ -83,7 +95,28 @@ if (!isset($_SESSION['id'])) {
     edit
     </span></a>";
     }
+    echo "<hr><br>";
+    echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"?page=comment\" method=\"POST\">";
+    echo "<div class=\"mb-3\">";
+        echo "<label for=\"titleTopic\">Titulo do topico: </label>";
+        echo "<input class=\"form-control\" type=\"text\" name=\"comment\" id=\"title\"><br>";
+        echo"<input type=\"hidden\" id=\"idTopic\" name=\"idTopic\" value=\"$idTopic\" />";
+        echo "</div>";
+        echo "<button type=\"submit\" class=\"btn btn-outline-primary\">Comentar</button>";
+        echo "</form><br>";
+
+    $sql = "SELECT id, user, comment, idtopic FROM sudo_comments WHERE idtopic = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":id", "$idTopic");
+    $stmt->execute();
+
+    while ($res = $stmt->fetch()) {
+      echo "$res[user]: ";
+      echo "$res[comment] <a href=\"?page=awss&awsId=$res[id]&idTopic=$idTopic\">Responder</a><hr>";
+    }
+
     echo "</div>";
+
   }elseif ($page == "newtopics") 
   {
     $tid = $_GET["tid"];
@@ -115,7 +148,8 @@ if (!isset($_SESSION['id'])) {
         echo "</div>";
 
     echo "</div>";
-  }elseif ($page == "newtopic") {
+  }elseif ($page == "newtopic") 
+  {
 
     $title = $_POST["title"];
     $content = $_POST["content"];
@@ -241,8 +275,102 @@ if (!isset($_SESSION['id'])) {
         echo "ocoreu algum erro";
       }
     }
-  }
+  }elseif ($page == "comment") 
+  {
+    $idTopic = $_POST["idTopic"];
+    $comment = $_POST["comment"];
+
+    $sql = "INSERT INTO sudo_comments (user, user_id, comment, idtopic) VALUES (:user, :id, :comment, :idtopic)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":user",getNameUser());
+    $stmt->bindValue(":id", getIdUser());
+    $stmt->bindValue(":comment", "$comment");
+    $stmt->bindValue(":idtopic", "$idTopic");
+    $stmt->execute();
+    $res = $stmt->rowCount();
+
+    if($res >= 1) 
+    {
+      //busca o valor total de comentarios no topico
+      $sql = "SELECT comment FROM sudo_topic WHERE id = :idTopic";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(":idTopic", "$idTopic");
+      $stmt->execute();
+      $res = $stmt->fetch();
+
+      $novovalor = $res["comment"] + 1;
+
+      //atualizar o novo valor 
+      $sql = "UPDATE sudo_topic SET comment = :comment WHERE id = :idTopic";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(":comment","$novovalor");
+      $stmt->bindValue(":idTopic", "$idTopic");
+      $stmt->execute();
+
+      echo "Comentario adicionado!";
+    }else{
+      echo "Ocorreu algum erro";
+    }
+  }elseif ($page == "awss") {
+    $idTopic = $_GET["idTopic"];
+    $awsId = $_GET["awsId"];
+
+    echo "<div class=\"container\">";
+
+    echo "<form class=\"gy-2 gx-3 align-items-center\" action=\"?page=aws\" method=\"POST\">";
+
+    echo "<div class=\"mb-3\">";
+        echo "<label for=\"titleTopic\" class=\"col-form-label\">Resposta: </label>";
+        echo "<input type=\"text\" class=\"form-control\" id=\"exampleFormControlInput1\" name=\"aws\" id=\"resposta\"><br>";
+        echo "<input type=\"hidden\" id=\"awsId\" name=\"awsId\" value=\"$awsId\" />";
+        echo "<input type=\"hidden\" id=\"idTopic\" name=\"idTopic\" value=\"$idTopic\" />";
+        echo "</div>";
+
+        echo "<button type=\"submit\" class=\"btn btn-outline-primary\">Enviar</button>";
+
+        echo "</form>";
+        echo "</div>";
+
   
+  }elseif ($page == "aws") 
+  {
+    $idTopic = $_POST["idTopic"];
+    $awsId = $_POST["awsId"];
+    $aws = $_POST["aws"];
+
+    $sql = "INSERT INTO sudo_aws (user, user_id, aws, commentid, idtopic) VALUES(:user, :user_id, :aws, :commentid, :idtopic)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(":user", getNameUser());
+    $stmt->bindValue(":user_id", getIdUser());
+    $stmt->bindValue("aws", "$aws");
+    $stmt->bindValue(":commentid","$awsId");
+    $stmt->bindValue(":idtopic", "$idTopic");
+    $stmt->execute();
+    $res = $stmt->rowCount();
+
+    if ($res >= 1) {
+
+      //busca o valor total de comentarios no topico
+      $sql = "SELECT comment FROM sudo_topic WHERE id = :idTopic";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(":idTopic", "$idTopic");
+      $stmt->execute();
+      $res = $stmt->fetch();
+
+      $novovalor = $res["comment"] + 1;
+
+      //atualizar o novo valor 
+      $sql = "UPDATE sudo_topic SET comment = :comment WHERE id = :idTopic";
+      $stmt = $pdo->prepare($sql);
+      $stmt->bindValue(":comment","$novovalor");
+      $stmt->bindValue(":idTopic", "$idTopic");
+      $stmt->execute();
+
+      echo "Resposta adicionado!";
+    }else{
+      echo "Ocorreu algum erro";
+    }
+  }
   ?>
     <script src="../bootstrap/@popperjs/core/dist/umd/popper.js"></script>
     <script src="../bootstrap/dist/js/bootstrap.js"></script>
