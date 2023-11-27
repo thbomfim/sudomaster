@@ -34,7 +34,7 @@ if (!isset($_SESSION['id'])) {
     $fcat = $_GET["fcat"] ?? '';
     ?>
     <div class="container">
-        <a href="page.php?page=newtopics" class="center">crie um tópico</a><br>
+        <a href="forum.php?page=newtopics" class="center">crie um tópico</a><br>
         <?php
     echo "ola <strong> ".NAME_USER."</strong><br>";
     $fcats = $pdo->query("SELECT id, name FROM sudo_fcat ORDER BY position, id");
