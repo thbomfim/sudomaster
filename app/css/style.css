@@ -41,6 +41,13 @@ body {
     border-right: solid #00BFFF 2px;
 }
 
+.aws {
+    margin-left: 50px;
+    padding-left: 2px;
+    border-left: solid #0a53be 1px;
+    border-bottom: solid #0a53be 1px;
+}
+
 .divClear {
     color: #fff;
 }

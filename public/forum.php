@@ -110,9 +110,22 @@ if (!isset($_SESSION['id']))
     $stmt->bindValue(":id", "$idTopic");
     $stmt->execute();
 
+    
     while ($res = $stmt->fetch()) {
       echo "$res[user]: ";
-      echo "$res[comment] <a href=\"?page=awss&awsId=$res[id]&idTopic=$idTopic\">Responder</a><hr>";
+      echo "$res[comment] <a href=\"?page=awss&awsId=$res[id]&idTopic=$idTopic\">Responder</a><br>";
+      
+      $sql = "SELECT user, user_id, aws, idtopic, commentid FROM sudo_aws WHERE commentid = :id";
+      $cmd = $pdo->prepare($sql);
+      $cmd->bindValue(":id", "$res[id]");
+      $cmd->execute();
+      
+      if (count($cmd->fetchAll()) >= 1) 
+      {
+      echo "<span class=\"aws\">";
+      echo "$cmd[aws]</span>";
+      }
+      echo "<hr>";
     }
 
     echo "</div>";
@@ -370,6 +383,9 @@ if (!isset($_SESSION['id']))
     }else{
       echo "Ocorreu algum erro";
     }
+  }elseif ($page == "")
+  {
+
   }
   ?>
     <script src="../bootstrap/@popperjs/core/dist/umd/popper.js"></script>
